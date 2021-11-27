@@ -17,11 +17,15 @@ const App = () => {
     owner: null,
     contract: null,
   });
+  const [showAlert1, setShowAlert1] = useState(false)
+  const [messageAlert1, setMessageAlert1] = useState('')
   const [showAlert, setShowAlert] = useState(false)
   const [messageAlert, setMessageAlert] = useState('')
+  const [showEvent, setShowEvent] = useState(false)
+  const [messageEvent, setMessageEvent] = useState('')
   const [contentForm, setContentForm] = useState('')
   const [eventValue, setEventValue] = useState('')
-  const [workflowStatusId, setWorkflowStatusId] = useState(0)
+  const [workflowStatusId, setWorkflowStatusId] = useState("0")
   const [actualAccount, setActualAccount] = useState('')
 
   const status = [
@@ -41,6 +45,7 @@ const App = () => {
   ]
 
   const refAddress = useRef();
+  const refProposal = useRef();
 
 
   useEffect(() => {
@@ -48,23 +53,31 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log(`workflowStatusId`, workflowStatusId)
-  }, [workflowStatusId])
-
-  useEffect(() => {
     window.ethereum.on("accountsChanged", accounts => {
       if (accounts.length > 0) setActualAccount(accounts[0]);
     });
   });
 
-
   useEffect(() => {
     if (data.owner) console.log(`owner`, data.owner)
     if (data.accounts) console.log(`accounts`, data.accounts);
     if (actualAccount) console.log(`actualAccount`, actualAccount)
-    console.log(actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true)
-    // console.log()
-  }, [data, actualAccount]);
+    console.log(`workflowStatusId`, workflowStatusId)
+  }, [data, actualAccount, workflowStatusId]);
+
+  useEffect(() => {
+    if (eventValue === "VoterRegistered") {
+      setMessageEvent("Le voteur a été enregistré")
+      setShowEvent(true)
+      setEventValue('')
+    }
+    if (eventValue === "ProposalRegistered") {
+      setMessageEvent("La proposition a été enregistrée")
+      setShowEvent(true)
+      setEventValue('')
+    }
+
+  }, [eventValue]);
 
   const init = async () => {
     try {
@@ -118,14 +131,68 @@ const App = () => {
     }
   };
 
+
+  const handleWorkflow = async (e) => {
+    e.preventDefault()
+    setEventValue('')
+    try {
+      const { owner, contract } = data;
+      switch (workflowStatusId) {
+        case "0":
+          await contract.methods.startProposalsRegistering().send({ from: owner });
+          break;
+        case "1":
+          await contract.methods.endProposalsRegistering().send({ from: owner });
+          break;
+        case "2":
+          await contract.methods.startVotingSession().send({ from: owner });
+          break;
+        case "3":
+          await contract.methods.endVotingSession().send({ from: owner });
+          break;
+        case "4":
+          await contract.methods.tallyVotes().send({ from: owner });
+          break;
+
+        default:
+          break;
+      }
+      const statusId = await contract.methods.getWorkflowStatus().call()
+      setWorkflowStatusId(statusId)
+
+    } catch (error) {
+      console.log(`error`, error)
+      if (/Registering proposals cant be started now/.test(error.message)) {
+        setMessageAlert1("L'enregistrement des propositions ne peut pas commencer maintenant !")
+        setShowAlert1(true)
+      } else if (/Registering proposals havent started yet/.test(error.message)) {
+        setMessageAlert1("L'enregistrement des propositions n'a pas commencé !")
+        setShowAlert1(true)
+      } else if (/Registering proposals phase is not finished/.test(error.message)) {
+        setMessageAlert1("L'enregistrement des propositions n'est pas terminé !")
+        setShowAlert1(true)
+      } else if (/Voting session havent started yet/.test(error.message)) {
+        setMessageAlert1("La session de votes n'a pas commencé !")
+        setShowAlert1(true)
+      } else if (/Current status is not voting session ended/.test(error.message)) {
+        setMessageAlert1("La session de votes n'est pas terminé !")
+        setShowAlert1(true)
+      } else {
+        setMessageAlert1('Erreur inconnue !')
+        setShowAlert1(true)
+      }
+    }
+  }
+
   const plusVoter = async (e) => {
     e.preventDefault()
     try {
-      const { accounts, contract } = data;
+      const { contract, owner } = data;
       const address = refAddress.current.value;
 
       // Interaction avec le smart contract pour ajouter un compte 
-      await contract.methods.addVoter(address).send({ from: accounts[0] });
+      await contract.methods.addVoter(address).send({ from: owner });
+
     } catch (error) {
       // console.log(`error`, error.message)
       if (/Already registered/.test(error.message)) {
@@ -135,64 +202,38 @@ const App = () => {
         setMessageAlert('Enregistrement des voteurs inactive !')
         setShowAlert(true)
       } else {
-        setMessageAlert('Erreur inconnue...')
+        setMessageAlert('Erreur inconnue voter')
         setShowAlert(true)
       }
     }
     setContentForm("")
-    init();
   }
 
-  const handleWorkflow = async (e) => {
+  const plusProposal = async (e) => {
+    setEventValue('')
     e.preventDefault()
     try {
-      const { owner, contract } = data;
-      switch (workflowStatusId) {
-        case 0:
-          await contract.methods.startProposalsRegistering().send({ from: owner });
-          break;
-        case 1:
-          await contract.methods.endProposalsRegistering().send({ from: owner });
-          break;
-        case 2:
-          await contract.methods.startVotingSession().send({ from: owner });
-          break;
-        case 3:
-          await contract.methods.endVotingSession().send({ from: owner });
-          break;
-        case 4:
-          await contract.methods.tallyVotes().send({ from: owner });
-          break;
-      
-        default:
-          break;
-      }
-      // const statusId = await contract.methods.workflowStatus()
-      // console.log('statusId :>> ', statusId);
-      // setData({ workflowStatusId: statusId });
+      const { accounts, owner, contract } = data;
+      const proposal = refProposal.current.value;
+
+      // Interaction avec le smart contract pour ajouter un compte 
+      await contract.methods.addProposal(proposal).send({ from: actualAccount || owner });
 
     } catch (error) {
-      console.log(`error`, error)
-      if (/Registering proposals cant be started now/.test(error.message)) {
-        setMessageAlert("L'enregistrement des propositions ne peut pas commencer maintenant!")
+      // console.log(`error`, error.message)
+      if (/Proposals are not allowed yet/.test(error.message)) {
+        setMessageAlert("L'enregistrement des propositions n'est pas encore possible !")
         setShowAlert(true)
-      } else if (/Registering proposals havent started yet/.test(error.message)) {
-        setMessageAlert("L'enregistrement des propositions n'a pas commencé!")
-        setShowAlert(true)
-      } else if (/Registering proposals phase is not finished/.test(error.message)) {
-        setMessageAlert("L'enregistrement des propositions n'est pas terminé!")
-        setShowAlert(true)
-      } else if (/Voting session havent started yet/.test(error.message)) {
-        setMessageAlert("La session de votes n'a pas commencé!")
-        setShowAlert(true)
-      } else if (/Current status is not voting session ended/.test(error.message)) {
-        setMessageAlert("La session de votes n'est pas terminé!")
+      } else if (/The proposal cannot be empty/.test(error.message)) {
+        setMessageAlert('La proposition ne peut être vide !')
         setShowAlert(true)
       } else {
-        setMessageAlert('Erreur inconnue...')
+        setMessageAlert('Erreur inconnue proposal')
         setShowAlert(true)
+        console.log(error)
       }
     }
+    setContentForm("")
   }
 
   return !data.web3 ? (
@@ -212,36 +253,70 @@ const App = () => {
             </Card.Body>}
         </Card>
 
-        {showAlert &&
-          <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
-            <Alert.Heading>{messageAlert}</Alert.Heading>
+        {showAlert1 &&
+          <Alert variant="warning" onClose={() => setShowAlert1(false)} dismissible>
+            <Alert.Heading>{messageAlert1}</Alert.Heading>
           </Alert>}
       </div>
 
-      <div className="container mt-5">
-        <Card className="text-center">
-          <Card.Header><strong>Enregistrer un nouveau voteur</strong></Card.Header>
-          <Card.Body>
-            <Form>
-              <Form.Group className="mb-3" controlId="formAddress">
-                <Form.Label>Saisir une adresse Ethereum</Form.Label>
-                <Form.Control type="text" ref={refAddress}
-                  value={contentForm} onChange={(e) => setContentForm(e.target.value)} />
-              </Form.Group>
+      {(workflowStatusId === "0") &&
+        (actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
+        <div className="container mt-5">
+          <Card className="text-center">
+            <Card.Header><strong>Enregistrer un nouveau voteur</strong></Card.Header>
+            <Card.Body>
+              <Form>
+                <Form.Group className="mb-3" controlId="formAddress">
+                  <Form.Label>Saisir une adresse Ethereum</Form.Label>
+                  <Form.Control type="text" ref={refAddress}
+                    value={contentForm} onChange={(e) => setContentForm(e.target.value)} />
+                </Form.Group>
 
-              <Button onClick={plusVoter} variant="primary" type="submit">
-                Enregistrer
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-        <h3>{eventValue}</h3>
+                <Button onClick={plusVoter} variant="primary" type="submit">
+                  Enregistrer
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
 
-        {showAlert &&
-          <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
-            <Alert.Heading>{messageAlert}</Alert.Heading>
-          </Alert>}
-      </div>
+          {showAlert &&
+            <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
+              <Alert.Heading>{messageAlert}</Alert.Heading>
+            </Alert>}
+          {showEvent &&
+            <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
+              <Alert.Heading>{messageEvent}</Alert.Heading>
+            </Alert>}
+        </div>}
+
+      {(workflowStatusId === "1") &&
+        <div className="container mt-5">
+          <Card className="text-center">
+            <Card.Header><strong>Enregistrer une nouvelle proposition</strong></Card.Header>
+            <Card.Body>
+              <Form>
+                <Form.Group className="mb-3" controlId="formAddress">
+                  <Form.Label>Décrire votre proposition</Form.Label>
+                  <Form.Control type="text" ref={refProposal}
+                    value={contentForm} onChange={(e) => setContentForm(e.target.value)} />
+                </Form.Group>
+
+                <Button onClick={plusProposal} variant="primary" type="submit">
+                  Enregistrer
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
+
+          {showAlert &&
+            <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
+              <Alert.Heading>{messageAlert}</Alert.Heading>
+            </Alert>}
+          {showEvent &&
+            <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
+              <Alert.Heading>{messageEvent}</Alert.Heading>
+            </Alert>}
+        </div>}
     </>
   );
 };
