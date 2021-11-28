@@ -36,6 +36,7 @@ const App = () => {
   const [proposalsList, setProposalsList] = useState([])
   const [currentVote, setCurrentVote] = useState(null)
   const [voteOK, setVoteOK] = useState(false)
+  const [winnersList, setWinnersList] = useState(null)
 
   const status = [
     'Enregistrement des voteurs en cours',
@@ -80,16 +81,18 @@ const App = () => {
     // if (data.owner) console.log(`owner`, data.owner)
     // if (data.accounts) console.log(`accounts`, data.accounts);
     // if (actualAccount) console.log(`actualAccount`, actualAccount)
-    // console.log(`workflowStatusId`, workflowStatusId)
+    console.log(`workflowStatusId`, workflowStatusId)
     if (currentVote) console.log(`currentVote`, currentVote)
     if (voter) {
       setVotersList(old => [...old, voter])
       setVoter(null)
     }
-  }, [data, actualAccount, workflowStatusId, voter, currentVote]);
+    if (winnersList) console.log(`winnersList`, winnersList)
+  }, [data, actualAccount, workflowStatusId, voter, currentVote, winnersList]);
 
   useEffect(() => {
     console.log(`proposalsList`, proposalsList)
+    console.log(`proposalsListSorted`, [...proposalsList].sort((a, b) => !b[1] - !a[1] || b[1] - a[1]))
   }, [proposalsList]);
 
   useEffect(() => {
@@ -135,17 +138,7 @@ const App = () => {
       // example of interacting with the contract's methods.
       setData({ web3, accounts, owner, contract: instance });
 
-
-      // await instance.events.SetEvent()
-      //   .on('data', event => {
-      //     let value = event.returnValues.value;
-      //     console.log('data', value);
-      //     setEventValue(value);
-      //   })
-      //   .on('changed', changed => console.log('changed', changed))
-      //   // .on('error', err => throw err)
-      //   .on('connected', str => console.log('connected', str))
-
+      // Get All events emitted
       await instance.events.allEvents((err, evt) => {
         setEventValue(evt.event)
         console.log(`evt`, evt.event)
@@ -182,7 +175,7 @@ const App = () => {
           await contract.methods.endVotingSession().send({ from: owner });
           break;
         case "4":
-          await contract.methods.tallyVotes().send({ from: owner });
+          handleResult()
           break;
 
         default:
@@ -262,6 +255,9 @@ const App = () => {
       } else if (/The proposal cannot be empty/.test(error.message)) {
         setMessageAlert('La proposition ne peut être vide !')
         setShowAlert(true)
+      } else if (/You're not a voter/.test(error.message)) {
+        setMessageAlert("Vous n'êtes pas enregistré comme voteur !")
+        setShowAlert(true)
       } else {
         setMessageAlert('Erreur inconnue proposal')
         setShowAlert(true)
@@ -283,12 +279,10 @@ const App = () => {
     try {
       const { owner, contract } = data;
       fetchAllProposals()
-      // Interaction avec le smart contract pour ajouter un compte 
       await contract.methods.setVote(currentVote).send({ from: actualAccount || owner });
       setVoteOK(true)
 
     } catch (error) {
-      // console.log(`error`, error.message)
       if (/Voting session havent started yet/.test(error.message)) {
         setMessageAlert("La session de vote n'a pas encore débuté !")
         setShowAlert(true)
@@ -298,8 +292,37 @@ const App = () => {
       } else if (/Proposal not found/.test(error.message)) {
         setMessageAlert("La proposition n'existe pas !")
         setShowAlert(true)
+      } else if (/You're not a voter/.test(error.message)) {
+        setMessageAlert("Vous n'êtes pas enregistré comme voteur !")
+        setShowAlert(true)
       } else {
-        setMessageAlert('Erreur inconnue proposal')
+        setMessageAlert('Erreur inconnue vote')
+        setShowAlert(true)
+        console.log(error)
+      }
+    }
+  }
+
+  const handleResult = async (e) => {
+    setEventValue('')
+    try {
+      const { owner, contract } = data;
+      fetchAllProposals()
+      await contract.methods.tallyVotesDraw().send({ from: owner });
+      const list = await contract.methods.getWinners().call();
+      setWinnersList(list)
+      const statusId = await contract.methods.getWorkflowStatus().call()
+      setWorkflowStatusId(statusId)
+
+    } catch (error) {
+      if (/Current status is not voting session ended/.test(error.message)) {
+        setMessageAlert("La session de vote n'est pas encore terminée !")
+        setShowAlert(true)
+      } else if (/You're not a voter/.test(error.message)) {
+        setMessageAlert("Vous n'êtes pas enregistré comme voteur !")
+        setShowAlert(true)
+      } else {
+        setMessageAlert('Erreur inconnue result')
         setShowAlert(true)
         console.log(error)
       }
@@ -315,6 +338,7 @@ const App = () => {
         <Card className="text-center">
           <Card.Header className="fs-1"><strong>{status[workflowStatusId].toUpperCase()}</strong></Card.Header>
           {(actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
+            workflowStatusId < statusButton.length &&
             <Card.Body>
               <Form>
                 <Button onClick={handleWorkflow} variant="info" type="submit">
@@ -335,7 +359,7 @@ const App = () => {
         (actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header><strong>Enregistrer un nouveau voteur</strong></Card.Header>
+            <Card.Header className="fs-3">Enregistrer un nouveau voteur</Card.Header>
             <Card.Body>
               <Form>
                 <Form.Group className="mb-3" controlId="formAddress">
@@ -361,7 +385,7 @@ const App = () => {
 
             {votersList[0] &&
               <>
-                <Card.Footer><strong>Liste des comptes autorisés</strong></Card.Footer>
+                <Card.Footer className="fs-3">Liste des comptes autorisés</Card.Footer>
                 <ListGroup variant="flush">
                   {votersList &&
                     votersList.map((a, i) => <ListGroup.Item key={i}>{a}</ListGroup.Item>)
@@ -376,7 +400,7 @@ const App = () => {
       {(workflowStatusId === "1") &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header><strong>Enregistrer une nouvelle proposition</strong></Card.Header>
+            <Card.Header className="fs-3">Enregistrer une nouvelle proposition</Card.Header>
             <Card.Body>
               <Form>
                 <Form.Group className="mb-3" controlId="formAddress">
@@ -402,7 +426,7 @@ const App = () => {
 
             {proposalsList[0] &&
               <>
-                <Card.Header><strong>Liste des propositions</strong></Card.Header>
+                <Card.Header className="fs-3">Liste des propositions</Card.Header>
                 <ListGroup variant="flush">
                   {proposalsList &&
                     proposalsList.map((a, i) => <ListGroup.Item key={i}>{a[0]}</ListGroup.Item>)
@@ -417,7 +441,7 @@ const App = () => {
         !voteOK &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header><strong>Voter pour une proposition</strong></Card.Header>
+            <Card.Header className="fs-3">Voter pour une proposition</Card.Header>
             <Card.Body>
               <Form onSubmit={handleVote}>
                 <Form.Group className="text-start mb-3">
@@ -445,36 +469,41 @@ const App = () => {
               <Alert.Heading>{messageAlert}</Alert.Heading>
             </Alert>}
         </div>}
-      {showEvent &&
+      {(workflowStatusId === "3") &&
+        showEvent &&
         <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
           <Alert.Heading>{messageEvent}</Alert.Heading>
         </Alert>}
 
       {/* RESULT */}
+      {/* .sort((a, b) => b[1] - a[1]) */}
       {(workflowStatusId === "5") &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header><strong>Résultat des votes</strong></Card.Header>
-            <Card.Body>
-              <Form onSubmit={handleVote}>
-                <Form.Group className="text-start mb-3">
-                  {proposalsList &&
-                    proposalsList.map((a, i) =>
-                      <Form.Check
-                        key={i}
-                        onChange={(e) => setCurrentVote(e.target.id)}
-                        type="radio"
-                        label={a[0]}
-                        name="formRadios"
-                        id={i}
-                      />)
-                  }
-                </Form.Group>
-                <Form.Group >
-                  <Button type="submit">Voter</Button>
-                </Form.Group>
-              </Form>
-            </Card.Body>
+            <Card.Header className="fs-3">Proposition(s) adoptée(s)</Card.Header>
+            <ListGroup variant="flush" className="fs-4">
+              {winnersList &&
+                winnersList.map((a, i) => <ListGroup.Item key={i}>{a[0]}</ListGroup.Item>)
+              }
+            </ListGroup>
+          </Card>
+          <Card className="text-center mt-5">
+            <Card.Header className="fs-3">Résultat des votes</Card.Header>
+            <Table striped bordered>
+              <thead>
+                <tr>
+                  <th>Nombre de votes</th>
+                  <th>Propositions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {proposalsList &&
+                  [...proposalsList]
+                    .sort((a, b) => !b[1] - !a[1] || b[1] - a[1])
+                    .map((a, i) => <tr key={i}><td>{a[1]}</td><td>{a[0]}</td></tr>)
+                }
+              </tbody>
+            </Table>
           </Card>
 
           {showAlert &&
