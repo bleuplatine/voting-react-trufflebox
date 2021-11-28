@@ -70,6 +70,14 @@ contract Voting is Ownable {
         return proposalsArray[_id];
     }
 
+    /// @notice Returns the list of proposals
+    /// @return Returns an array of struct
+    function getAllProposals() external view returns (Proposal[] memory) {
+        return proposalsArray;
+    }
+    
+
+
     // ne pas tester
     /// @notice Returns the tied winning proposals (description & number of votes)
     /// @return Returns an array of struct
@@ -130,7 +138,7 @@ contract Voting is Ownable {
 
     /// @notice Votes for a proposal
     /// @param _id The id of the proposal
-    function setVote( uint _id) external onlyVoters {
+    function setVote(uint _id) external onlyVoters {
         require(workflowStatus == WorkflowStatus.VotingSessionStarted, 'Voting session havent started yet');
         require(voters[msg.sender].hasVoted != true, 'You have already voted');
         require(_id <= proposalsArray.length, 'Proposal not found'); // pas obligé, et pas besoin du >0 car uint

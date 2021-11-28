@@ -6,6 +6,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Alert from 'react-bootstrap/Alert';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Table from 'react-bootstrap/Table';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 // import "./App.css";
 
@@ -27,6 +31,11 @@ const App = () => {
   const [eventValue, setEventValue] = useState('')
   const [workflowStatusId, setWorkflowStatusId] = useState("0")
   const [actualAccount, setActualAccount] = useState('')
+  const [voter, setVoter] = useState(null)
+  const [votersList, setVotersList] = useState([])
+  const [proposalsList, setProposalsList] = useState([])
+  const [currentVote, setCurrentVote] = useState(null)
+  const [voteOK, setVoteOK] = useState(false)
 
   const status = [
     'Enregistrement des voteurs en cours',
@@ -39,8 +48,8 @@ const App = () => {
   const statusButton = [
     "Débuter l'enregistrement des propositions",
     "Stopper l'enregistrement des propositions",
-    "Débuter la session de vote en cours",
-    "Stopper la session de vote terminée",
+    "Débuter la session de vote",
+    "Stopper la session de vote",
     "Afficher le résultat des votes"
   ]
 
@@ -59,11 +68,29 @@ const App = () => {
   });
 
   useEffect(() => {
-    if (data.owner) console.log(`owner`, data.owner)
-    if (data.accounts) console.log(`accounts`, data.accounts);
-    if (actualAccount) console.log(`actualAccount`, actualAccount)
-    console.log(`workflowStatusId`, workflowStatusId)
-  }, [data, actualAccount, workflowStatusId]);
+    (workflowStatusId === "3") && (async () => {
+      const { contract } = data;
+      const voter = await contract.methods.getVoter(actualAccount).call();
+      setVoteOK(voter.hasVoted)
+    })()
+    console.log(`voteOK`, voteOK)
+  }, [actualAccount])
+
+  useEffect(() => {
+    // if (data.owner) console.log(`owner`, data.owner)
+    // if (data.accounts) console.log(`accounts`, data.accounts);
+    // if (actualAccount) console.log(`actualAccount`, actualAccount)
+    // console.log(`workflowStatusId`, workflowStatusId)
+    if (currentVote) console.log(`currentVote`, currentVote)
+    if (voter) {
+      setVotersList(old => [...old, voter])
+      setVoter(null)
+    }
+  }, [data, actualAccount, workflowStatusId, voter, currentVote]);
+
+  useEffect(() => {
+    console.log(`proposalsList`, proposalsList)
+  }, [proposalsList]);
 
   useEffect(() => {
     if (eventValue === "VoterRegistered") {
@@ -76,7 +103,11 @@ const App = () => {
       setShowEvent(true)
       setEventValue('')
     }
-
+    if (eventValue === "Voted") {
+      setMessageEvent("Le vote a été enregistré")
+      setShowEvent(true)
+      setEventValue('')
+    }
   }, [eventValue]);
 
   const init = async () => {
@@ -131,7 +162,6 @@ const App = () => {
     }
   };
 
-
   const handleWorkflow = async (e) => {
     e.preventDefault()
     setEventValue('')
@@ -146,6 +176,7 @@ const App = () => {
           break;
         case "2":
           await contract.methods.startVotingSession().send({ from: owner });
+          fetchAllProposals()
           break;
         case "3":
           await contract.methods.endVotingSession().send({ from: owner });
@@ -192,6 +223,8 @@ const App = () => {
 
       // Interaction avec le smart contract pour ajouter un compte 
       await contract.methods.addVoter(address).send({ from: owner });
+      const voter = await contract.methods.getVoter(address).call();
+      setVoter([voter, address])
 
     } catch (error) {
       // console.log(`error`, error.message)
@@ -213,11 +246,13 @@ const App = () => {
     setEventValue('')
     e.preventDefault()
     try {
-      const { accounts, owner, contract } = data;
-      const proposal = refProposal.current.value;
+      const { owner, contract } = data;
+      const val = refProposal.current.value;
 
       // Interaction avec le smart contract pour ajouter un compte 
-      await contract.methods.addProposal(proposal).send({ from: actualAccount || owner });
+      await contract.methods.addProposal(val).send({ from: actualAccount || owner });
+      fetchAllProposals()
+      // setProposal(val)
 
     } catch (error) {
       // console.log(`error`, error.message)
@@ -236,10 +271,46 @@ const App = () => {
     setContentForm("")
   }
 
+  const fetchAllProposals = async () => {
+    const { contract } = data;
+    const list = await contract.methods.getAllProposals().call();
+    setProposalsList(list)
+  }
+
+  const handleVote = async (e) => {
+    setEventValue('')
+    e.preventDefault()
+    try {
+      const { owner, contract } = data;
+      fetchAllProposals()
+      // Interaction avec le smart contract pour ajouter un compte 
+      await contract.methods.setVote(currentVote).send({ from: actualAccount || owner });
+      setVoteOK(true)
+
+    } catch (error) {
+      // console.log(`error`, error.message)
+      if (/Voting session havent started yet/.test(error.message)) {
+        setMessageAlert("La session de vote n'a pas encore débuté !")
+        setShowAlert(true)
+      } else if (/You have already voted/.test(error.message)) {
+        setMessageAlert('Vous avez déjà voté !')
+        setShowAlert(true)
+      } else if (/Proposal not found/.test(error.message)) {
+        setMessageAlert("La proposition n'existe pas !")
+        setShowAlert(true)
+      } else {
+        setMessageAlert('Erreur inconnue proposal')
+        setShowAlert(true)
+        console.log(error)
+      }
+    }
+  }
+
   return !data.web3 ? (
     <div className="container">Loading Web3, accounts, and contract...</div>
   ) : (
     <>
+      {/* WORKFLOW */}
       <div className="container mt-5">
         <Card className="text-center">
           <Card.Header className="fs-1"><strong>{status[workflowStatusId].toUpperCase()}</strong></Card.Header>
@@ -259,6 +330,7 @@ const App = () => {
           </Alert>}
       </div>
 
+      {/* VOTERS */}
       {(workflowStatusId === "0") &&
         (actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
         <div className="container mt-5">
@@ -277,18 +349,30 @@ const App = () => {
                 </Button>
               </Form>
             </Card.Body>
+
+            {showAlert &&
+              <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
+                <Alert.Heading>{messageAlert}</Alert.Heading>
+              </Alert>}
+            {showEvent &&
+              <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
+                <Alert.Heading>{messageEvent}</Alert.Heading>
+              </Alert>}
+
+            {votersList[0] &&
+              <>
+                <Card.Footer><strong>Liste des comptes autorisés</strong></Card.Footer>
+                <ListGroup variant="flush">
+                  {votersList &&
+                    votersList.map((a, i) => <ListGroup.Item key={i}>{a}</ListGroup.Item>)
+                  }
+                </ListGroup>
+              </>}
           </Card>
 
-          {showAlert &&
-            <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
-              <Alert.Heading>{messageAlert}</Alert.Heading>
-            </Alert>}
-          {showEvent &&
-            <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
-              <Alert.Heading>{messageEvent}</Alert.Heading>
-            </Alert>}
         </div>}
 
+      {/* PROPOSALS */}
       {(workflowStatusId === "1") &&
         <div className="container mt-5">
           <Card className="text-center">
@@ -306,15 +390,96 @@ const App = () => {
                 </Button>
               </Form>
             </Card.Body>
+
+            {showAlert &&
+              <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
+                <Alert.Heading>{messageAlert}</Alert.Heading>
+              </Alert>}
+            {showEvent &&
+              <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
+                <Alert.Heading>{messageEvent}</Alert.Heading>
+              </Alert>}
+
+            {proposalsList[0] &&
+              <>
+                <Card.Header><strong>Liste des propositions</strong></Card.Header>
+                <ListGroup variant="flush">
+                  {proposalsList &&
+                    proposalsList.map((a, i) => <ListGroup.Item key={i}>{a[0]}</ListGroup.Item>)
+                  }
+                </ListGroup>
+              </>}
+          </Card>
+        </div>}
+
+      {/* VOTING */}
+      {(workflowStatusId === "3") &&
+        !voteOK &&
+        <div className="container mt-5">
+          <Card className="text-center">
+            <Card.Header><strong>Voter pour une proposition</strong></Card.Header>
+            <Card.Body>
+              <Form onSubmit={handleVote}>
+                <Form.Group className="text-start mb-3">
+                  {proposalsList &&
+                    proposalsList.map((a, i) =>
+                      <Form.Check
+                        key={i}
+                        onChange={(e) => setCurrentVote(e.target.id)}
+                        type="radio"
+                        label={a[0]}
+                        name="formRadios"
+                        id={i}
+                      />)
+                  }
+                </Form.Group>
+                <Form.Group >
+                  <Button type="submit">Voter</Button>
+                </Form.Group>
+              </Form>
+            </Card.Body>
           </Card>
 
           {showAlert &&
             <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
               <Alert.Heading>{messageAlert}</Alert.Heading>
             </Alert>}
-          {showEvent &&
-            <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
-              <Alert.Heading>{messageEvent}</Alert.Heading>
+        </div>}
+      {showEvent &&
+        <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
+          <Alert.Heading>{messageEvent}</Alert.Heading>
+        </Alert>}
+
+      {/* RESULT */}
+      {(workflowStatusId === "5") &&
+        <div className="container mt-5">
+          <Card className="text-center">
+            <Card.Header><strong>Résultat des votes</strong></Card.Header>
+            <Card.Body>
+              <Form onSubmit={handleVote}>
+                <Form.Group className="text-start mb-3">
+                  {proposalsList &&
+                    proposalsList.map((a, i) =>
+                      <Form.Check
+                        key={i}
+                        onChange={(e) => setCurrentVote(e.target.id)}
+                        type="radio"
+                        label={a[0]}
+                        name="formRadios"
+                        id={i}
+                      />)
+                  }
+                </Form.Group>
+                <Form.Group >
+                  <Button type="submit">Voter</Button>
+                </Form.Group>
+              </Form>
+            </Card.Body>
+          </Card>
+
+          {showAlert &&
+            <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
+              <Alert.Heading>{messageAlert}</Alert.Heading>
             </Alert>}
         </div>}
     </>
