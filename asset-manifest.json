@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/voting-react-truffle-deploy/static/css/main.4a4137e4.chunk.css",
+    "main.js": "/voting-react-truffle-deploy/static/js/main.052061ed.chunk.js",
+    "main.js.map": "/voting-react-truffle-deploy/static/js/main.052061ed.chunk.js.map",
+    "runtime-main.js": "/voting-react-truffle-deploy/static/js/runtime-main.b382bb92.js",
+    "runtime-main.js.map": "/voting-react-truffle-deploy/static/js/runtime-main.b382bb92.js.map",
+    "static/css/2.a3df60aa.chunk.css": "/voting-react-truffle-deploy/static/css/2.a3df60aa.chunk.css",
+    "static/js/2.d84adf31.chunk.js": "/voting-react-truffle-deploy/static/js/2.d84adf31.chunk.js",
+    "static/js/2.d84adf31.chunk.js.map": "/voting-react-truffle-deploy/static/js/2.d84adf31.chunk.js.map",
+    "index.html": "/voting-react-truffle-deploy/index.html",
+    "static/css/2.a3df60aa.chunk.css.map": "/voting-react-truffle-deploy/static/css/2.a3df60aa.chunk.css.map",
+    "static/css/main.4a4137e4.chunk.css.map": "/voting-react-truffle-deploy/static/css/main.4a4137e4.chunk.css.map",
+    "static/js/2.d84adf31.chunk.js.LICENSE.txt": "/voting-react-truffle-deploy/static/js/2.d84adf31.chunk.js.LICENSE.txt",
+    "static/media/bootstrap-icons.css": "/voting-react-truffle-deploy/static/media/bootstrap-icons.ea6f3dfe.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b382bb92.js",
+    "static/css/2.a3df60aa.chunk.css",
+    "static/js/2.d84adf31.chunk.js",
+    "static/css/main.4a4137e4.chunk.css",
+    "static/js/main.052061ed.chunk.js"
+  ]
+}
