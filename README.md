@@ -1,9 +1,10 @@
-# Déploiement sur Ganache ou Ropsten
+# Déploiement sur Ganache (ou Ropsten)
 
 
-## Installation
+## Installation et lancement
 
 Truffle et Ganache doivent être installés.
+
 A la racine :
 
 ```bash
@@ -15,6 +16,8 @@ Lancer Ganache dans un 1er terminal :
 ```bash
 ganache-cli
 ```
+Dans un 2nd terminal.
+
 A la racine :
 
 ```bash
