@@ -5,13 +5,11 @@ import getWeb3 from "./getWeb3";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
-import Alert from 'react-bootstrap/Alert';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Table from 'react-bootstrap/Table';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Modal from 'react-bootstrap/Modal';
 
-// import "./App.css";
+// import A01 from "./A01.png";
 
 const App = () => {
   const [data, setData] = useState({
@@ -336,6 +334,7 @@ const App = () => {
       {/* WORKFLOW */}
       <div className="container mt-5">
         <Card className="text-center">
+        <Card.Img variant="top" src={`./img/${workflowStatusId}.png`} />
           <Card.Header className="fs-1"><strong>{status[workflowStatusId].toUpperCase()}</strong></Card.Header>
           {(actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
             workflowStatusId < statusButton.length &&
@@ -349,9 +348,18 @@ const App = () => {
         </Card>
 
         {showAlert1 &&
-          <Alert variant="warning" onClose={() => setShowAlert1(false)} dismissible>
-            <Alert.Heading>{messageAlert1}</Alert.Heading>
-          </Alert>}
+          <Modal
+            show={showAlert1}
+            onHide={() => setShowAlert(false)}
+            dialogClassName="modal-90w"
+            aria-labelledby="alert-modal">
+            <Modal.Header closeButton className="bg-warning text-dark">
+              <Modal.Title id="alert-modal">
+                <i class="bi bi-exclamation-octagon-fill"></i> ALERTE
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="bg-warning text-dark bg-opacity-75 fs-4">{messageAlert1}</Modal.Body>
+          </Modal>}
       </div>
 
       {/* VOTERS */}
@@ -375,13 +383,33 @@ const App = () => {
             </Card.Body>
 
             {showAlert &&
-              <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
-                <Alert.Heading>{messageAlert}</Alert.Heading>
-              </Alert>}
+              <Modal
+                show={showAlert}
+                onHide={() => setShowAlert(false)}
+                dialogClassName="modal-90w"
+                aria-labelledby="alert-modal">
+                <Modal.Header closeButton className="bg-warning text-dark">
+                  <Modal.Title id="alert-modal">
+                    <i class="bi bi-exclamation-octagon-fill"></i> ALERTE
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="bg-warning text-dark bg-opacity-75 fs-4">{messageAlert}</Modal.Body>
+              </Modal>}
+
             {showEvent &&
-              <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
-                <Alert.Heading>{messageEvent}</Alert.Heading>
-              </Alert>}
+              <Modal
+                show={showEvent}
+                onHide={() => setShowEvent(false)}
+                dialogClassName="modal-90w"
+                aria-labelledby="alert-modal">
+                <Modal.Header closeButton className="bg-success text-white">
+                  <Modal.Title id="alert-modal">
+                    <i class="bi bi-check-square-fill"></i> VALIDATION
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="bg-success text-white bg-opacity-75 fs-4">{messageEvent}</Modal.Body>
+              </Modal>}
+
 
             {votersList[0] &&
               <>
@@ -416,13 +444,33 @@ const App = () => {
             </Card.Body>
 
             {showAlert &&
-              <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
-                <Alert.Heading>{messageAlert}</Alert.Heading>
-              </Alert>}
+              <Modal
+                show={showAlert}
+                onHide={() => setShowAlert(false)}
+                dialogClassName="modal-90w"
+                aria-labelledby="alert-modal">
+                <Modal.Header closeButton className="bg-warning text-dark">
+                  <Modal.Title id="alert-modal">
+                    <i class="bi bi-exclamation-octagon-fill"></i> ALERTE
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="bg-warning text-dark bg-opacity-75 fs-4">{messageAlert}</Modal.Body>
+              </Modal>}
+
             {showEvent &&
-              <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
-                <Alert.Heading>{messageEvent}</Alert.Heading>
-              </Alert>}
+              <Modal
+                show={showEvent}
+                onHide={() => setShowEvent(false)}
+                dialogClassName="modal-90w"
+                aria-labelledby="alert-modal">
+                <Modal.Header closeButton className="bg-success text-white">
+                  <Modal.Title id="alert-modal">
+                    <i class="bi bi-check-square-fill"></i> VALIDATION
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="bg-success text-white bg-opacity-75 fs-4">{messageEvent}</Modal.Body>
+              </Modal>}
+
 
             {proposalsList[0] &&
               <>
@@ -465,15 +513,33 @@ const App = () => {
           </Card>
 
           {showAlert &&
-            <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
-              <Alert.Heading>{messageAlert}</Alert.Heading>
-            </Alert>}
+            <Modal
+              show={showAlert}
+              onHide={() => setShowAlert(false)}
+              dialogClassName="modal-90w"
+              aria-labelledby="alert-modal">
+              <Modal.Header closeButton className="bg-warning text-dark">
+                <Modal.Title id="alert-modal">
+                  <i class="bi bi-exclamation-octagon-fill"></i> ALERTE
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="bg-warning text-dark bg-opacity-75 fs-4">{messageAlert}</Modal.Body>
+            </Modal>}
         </div>}
       {(workflowStatusId === "3") &&
         showEvent &&
-        <Alert variant="success" onClose={() => setShowEvent(false)} dismissible>
-          <Alert.Heading>{messageEvent}</Alert.Heading>
-        </Alert>}
+        <Modal
+          show={showEvent}
+          onHide={() => setShowEvent(false)}
+          dialogClassName="modal-90w"
+          aria-labelledby="alert-modal">
+          <Modal.Header closeButton className="bg-success text-white">
+            <Modal.Title id="alert-modal">
+              <i class="bi bi-check-square-fill"></i> VALIDATION
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="bg-success text-white bg-opacity-75 fs-4">{messageEvent}</Modal.Body>
+        </Modal>}
 
       {/* RESULT */}
       {/* .sort((a, b) => b[1] - a[1]) */}
@@ -507,9 +573,18 @@ const App = () => {
           </Card>
 
           {showAlert &&
-            <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
-              <Alert.Heading>{messageAlert}</Alert.Heading>
-            </Alert>}
+            <Modal
+              show={showAlert}
+              onHide={() => setShowAlert(false)}
+              dialogClassName="modal-90w"
+              aria-labelledby="alert-modal">
+              <Modal.Header closeButton className="bg-warning text-dark">
+                <Modal.Title id="alert-modal">
+                  <i class="bi bi-exclamation-octagon-fill"></i> ALERTE
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="bg-warning text-dark bg-opacity-75 fs-4">{messageAlert}</Modal.Body>
+            </Modal>}
         </div>}
     </>
   );

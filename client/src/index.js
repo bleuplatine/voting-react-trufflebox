@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-dark-5/dist/css/bootstrap-dark.css'
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 
 ReactDOM.render(<App />, document.getElementById('root'));

@@ -1,4 +1,15 @@
-.App {
+.alert_modal .modal-content {
+  background-color: rgb(231, 163, 61);
+  color: rgb(231, 163, 61);
+}
+
+.event_modal .modal-content {
+  background-color: rgb(26, 194, 96);
+  color: rgb(26, 194, 96);
+}
+
+
+/* .App {
   text-align: center;
 }
 
@@ -19,4 +30,4 @@
 
 .App-link {
   color: #09d3ac;
-}
+} */
