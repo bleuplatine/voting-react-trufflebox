@@ -335,7 +335,7 @@ const App = () => {
       <div className="container mt-5">
         <Card className="text-center">
         <Card.Img variant="top" src={`./img/${workflowStatusId}.png`} />
-          <Card.Header className="fs-1"><strong>{status[workflowStatusId].toUpperCase()}</strong></Card.Header>
+          <Card.Header className="fs-1 bg-light text-dark"><strong>{status[workflowStatusId].toUpperCase()}</strong></Card.Header>
           {(actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
             workflowStatusId < statusButton.length &&
             <Card.Body>
@@ -353,7 +353,7 @@ const App = () => {
             onHide={() => setShowAlert(false)}
             dialogClassName="modal-90w"
             aria-labelledby="alert-modal">
-            <Modal.Header closeButton className="bg-warning text-dark">
+            <Modal.Header closeButton className="bg-warning text-black">
               <Modal.Title id="alert-modal">
                 <i class="bi bi-exclamation-octagon-fill"></i> ALERTE
               </Modal.Title>
@@ -367,7 +367,7 @@ const App = () => {
         (actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header className="fs-3">Enregistrer un nouveau voteur</Card.Header>
+            <Card.Header className="fs-3 bg-light text-black">Enregistrer un nouveau voteur</Card.Header>
             <Card.Body>
               <Form>
                 <Form.Group className="mb-3" controlId="formAddress">
@@ -413,7 +413,7 @@ const App = () => {
 
             {votersList[0] &&
               <>
-                <Card.Footer className="fs-3">Liste des comptes autorisés</Card.Footer>
+                <Card.Footer className="fs-3 bg-light text-black">Liste des comptes autorisés</Card.Footer>
                 <ListGroup variant="flush">
                   {votersList &&
                     votersList.map((a, i) => <ListGroup.Item key={i}>{a}</ListGroup.Item>)
@@ -428,7 +428,7 @@ const App = () => {
       {(workflowStatusId === "1") &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header className="fs-3">Enregistrer une nouvelle proposition</Card.Header>
+            <Card.Header className="fs-3  bg-light text-black">Enregistrer une nouvelle proposition</Card.Header>
             <Card.Body>
               <Form>
                 <Form.Group className="mb-3" controlId="formAddress">
@@ -474,7 +474,7 @@ const App = () => {
 
             {proposalsList[0] &&
               <>
-                <Card.Header className="fs-3">Liste des propositions</Card.Header>
+                <Card.Header className="fs-3  bg-light text-black">Liste des propositions</Card.Header>
                 <ListGroup variant="flush">
                   {proposalsList &&
                     proposalsList.map((a, i) => <ListGroup.Item key={i}>{a[0]}</ListGroup.Item>)
@@ -489,7 +489,7 @@ const App = () => {
         !voteOK &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header className="fs-3">Voter pour une proposition</Card.Header>
+            <Card.Header className="fs-3 bg-light text-black">Voter pour une proposition</Card.Header>
             <Card.Body>
               <Form onSubmit={handleVote}>
                 <Form.Group className="text-start mb-3">
@@ -546,15 +546,15 @@ const App = () => {
       {(workflowStatusId === "5") &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header className="fs-3">Proposition(s) adoptée(s)</Card.Header>
+            <Card.Header className="fs-3 bg-light text-black">Proposition(s) adoptée(s)</Card.Header>
             <ListGroup variant="flush" className="fs-4">
               {winnersList &&
-                winnersList.map((a, i) => <ListGroup.Item key={i}>{a[0]}</ListGroup.Item>)
+                winnersList.map((a, i) => <ListGroup.Item className="bg-info" key={i}>{a[0]}</ListGroup.Item>)
               }
             </ListGroup>
           </Card>
           <Card className="text-center mt-5">
-            <Card.Header className="fs-3">Résultat des votes</Card.Header>
+            <Card.Header className="fs-3 bg-light text-black" >Résultat des votes</Card.Header>
             <Table striped bordered>
               <thead>
                 <tr>
