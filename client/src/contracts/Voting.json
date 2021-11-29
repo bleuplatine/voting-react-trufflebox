@@ -29170,6 +29170,12 @@
     "version": "0.8.9+commit.e5eed63a.Emscripten.clang"
   },
   "networks": {
+    "3": {
+      "events": {},
+      "links": {},
+      "address": "0x217dCE1a2EdBb468651175a93309daA224b1606c",
+      "transactionHash": "0x19b4a417a07334c4a75d47515bcafbfc382715036a6ec1e250ef3a6ea5d49ff1"
+    },
     "5777": {
       "events": {
         "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
@@ -29257,12 +29263,12 @@
         }
       },
       "links": {},
-      "address": "0xfEFA201663CBeCa3760D77a1e93CA7919dED168b",
-      "transactionHash": "0x95e1aca04e0909af0fa3874a7cb3de60dd6ed6c24535544b49fed1ff5e94449c"
+      "address": "0x5A26B3712a89d9E55c7C3DB3941eb6314BeA395f",
+      "transactionHash": "0xb36de5c979c103a976a8d7788e7d759e1a952f63171ed398a84ad81fa4a5ec32"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-29T18:57:40.356Z",
+  "updatedAt": "2021-11-29T20:04:45.693Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Cyril Castagnet - Sébastien Verdenal",
