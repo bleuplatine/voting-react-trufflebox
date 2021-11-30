@@ -7,16 +7,17 @@ import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Table from 'react-bootstrap/Table';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 import ModalAlert from './components/ModalAlert'
 import ModalEvent from './components/ModalEvent'
 
-import img0 from "./img/0.png";
-import img1 from "./img/1.png";
-import img2 from "./img/2.png";
-import img3 from "./img/3.png";
-import img4 from "./img/4.png";
-import img5 from "./img/5.png";
+import img0 from "./img/0.svg";
+import img1 from "./img/1.svg";
+import img2 from "./img/2.svg";
+import img3 from "./img/3.svg";
+import img4 from "./img/4.svg";
+import img5 from "./img/5.svg";
 
 const App = () => {
   const [data, setData] = useState({
@@ -350,13 +351,16 @@ const App = () => {
       {/* WORKFLOW */}
       <div className="container mt-5">
         <Card className="text-center">
-          <Card.Img variant="top" src={srcImg} />
-          <Card.Header className="fs-1 bg-light text-dark text-uppercase"><strong>{status[workflowStatusId]}</strong></Card.Header>
+          <Card.Img className="bg-white" variant="top" src={srcImg} />
+          <Card.Header className="fs-1 bg-light text-dark text-uppercase">
+            <strong>{status[workflowStatusId]}</strong></Card.Header>
           {(actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
             workflowStatusId < statusButton.length &&
             <Card.Body>
               <Form>
-                <Button className="text-uppercase" onClick={handleWorkflow} variant="info" type="submit">
+                <Button className="text-uppercase" onClick={handleWorkflow}
+                  variant={/[13]/.test(workflowStatusId) ? "danger" : "success"} type="submit">
+                  <i class={/[13]/.test(workflowStatusId) ? "bi bi-stop-circle-fill" : "bi bi-play-circle-fill"}> </i>
                   {workflowStatusId < statusButton.length ? statusButton[workflowStatusId] : "Terminé"}
                 </Button>
               </Form>
@@ -369,16 +373,20 @@ const App = () => {
         (actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header className="fs-3 bg-light text-black">Enregistrer un nouveau voteur</Card.Header>
+            <Card.Header className="fs-3 bg-light text-black"><i class="bi bi-person-plus-fill"> </i>
+              Enregistrer un nouveau voteur</Card.Header>
             <Card.Body>
               <Form>
                 <Form.Group className="mb-3" controlId="formAddress">
                   <Form.Label>Saisir une adresse Ethereum</Form.Label>
-                  <Form.Control type="text" ref={refAddress}
-                    value={contentForm} onChange={(e) => setContentForm(e.target.value)} />
+                  <InputGroup>
+                    <InputGroup.Text id="inputAddress"><i class="bi bi-at"></i></InputGroup.Text>
+                    <Form.Control type="text" ref={refAddress} aria-describedby="inputAddress"
+                      value={contentForm} onChange={(e) => setContentForm(e.target.value)} />
+                  </InputGroup>
                 </Form.Group>
 
-                <Button className="text-uppercase" onClick={plusVoter} variant="primary" type="submit">
+                <Button className="text-uppercase" onClick={plusVoter} variant="info" type="submit">
                   Enregistrer
                 </Button>
               </Form>
@@ -386,7 +394,8 @@ const App = () => {
 
             {votersList[0] &&
               <>
-                <Card.Footer className="fs-3 bg-light text-black">Liste des comptes autorisés</Card.Footer>
+                <Card.Footer className="fs-3 bg-light text-black"><i class="bi bi-people-fill"> </i>
+                  Liste des comptes autorisés</Card.Footer>
                 <ListGroup variant="flush">
                   {votersList &&
                     votersList.map((a, i) => <ListGroup.Item key={i}>{a}</ListGroup.Item>)
@@ -401,16 +410,20 @@ const App = () => {
       {(workflowStatusId === "1") &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header className="fs-3  bg-light text-black">Enregistrer une nouvelle proposition</Card.Header>
+            <Card.Header className="fs-3  bg-light text-black"><i class="bi bi-chat-right-text"> </i>
+              Enregistrer une nouvelle proposition</Card.Header>
             <Card.Body>
               <Form>
                 <Form.Group className="mb-3" controlId="formAddress">
                   <Form.Label>Décrire votre proposition</Form.Label>
-                  <Form.Control type="text" ref={refProposal}
-                    value={contentForm} onChange={(e) => setContentForm(e.target.value)} />
+                  <InputGroup>
+                    <InputGroup.Text id="inputAddress"><i class="bi bi-pen"></i></InputGroup.Text>
+                    <Form.Control type="text" ref={refProposal}
+                      value={contentForm} onChange={(e) => setContentForm(e.target.value)} />
+                  </InputGroup>
                 </Form.Group>
 
-                <Button className="text-uppercase" onClick={plusProposal} variant="primary" type="submit">
+                <Button className="text-uppercase" onClick={plusProposal} variant="info" type="submit">
                   Enregistrer
                 </Button>
               </Form>
@@ -418,7 +431,8 @@ const App = () => {
 
             {proposalsList[0] &&
               <>
-                <Card.Header className="fs-3  bg-light text-black">Liste des propositions</Card.Header>
+                <Card.Header className="fs-3  bg-light text-black"><i class="bi bi-list-task"> </i>
+                  Liste des propositions</Card.Header>
                 <ListGroup variant="flush">
                   {proposalsList &&
                     proposalsList.map((a, i) => <ListGroup.Item key={i}>{a[0]}</ListGroup.Item>)
@@ -434,7 +448,8 @@ const App = () => {
         !voteOK &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header className="fs-3 bg-light text-black">Voter pour une proposition</Card.Header>
+            <Card.Header className="fs-3 bg-light text-black"><i class="bi bi-check-circle-fill"> </i>
+              Voter pour une proposition</Card.Header>
             <Card.Body>
               <Form onSubmit={handleVote}>
                 <Form.Group className="text-start mb-3">
@@ -451,7 +466,7 @@ const App = () => {
                   }
                 </Form.Group>
                 <Form.Group >
-                  <Button className="text-uppercase" type="submit">Voter</Button>
+                  <Button className="text-uppercase" variant="info" type="submit">Voter</Button>
                 </Form.Group>
               </Form>
             </Card.Body>
@@ -463,7 +478,8 @@ const App = () => {
       {(workflowStatusId === "5") &&
         <div className="container mt-5">
           <Card className="text-center">
-            <Card.Header className="fs-3 bg-light text-black">Proposition(s) adoptée(s)</Card.Header>
+            <Card.Header className="fs-3 bg-light text-black"><i class="bi bi-trophy-fill"> </i>
+              Proposition(s) adoptée(s)</Card.Header>
             <ListGroup variant="flush" className="fs-4">
               {winnersList &&
                 winnersList.map((a, i) => <ListGroup.Item className="bg-info" key={i}>{a[0]}</ListGroup.Item>)
@@ -471,7 +487,8 @@ const App = () => {
             </ListGroup>
           </Card>
           <Card className="text-center mt-5">
-            <Card.Header className="fs-3 bg-light text-black" >Résultats des votes</Card.Header>
+            <Card.Header className="fs-3 bg-light text-black"><i class="bi bi-sort-numeric-down"> </i>
+              Résultats des votes</Card.Header>
             <Table striped bordered>
               <thead>
                 <tr>
