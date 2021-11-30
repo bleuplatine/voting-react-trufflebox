@@ -16,9 +16,7 @@ Lancer Ganache dans un 1er terminal :
 ```bash
 ganache-cli
 ```
-Dans un 2nd terminal.
-
-A la racine :
+Dans un 2nd terminal. A la racine :
 
 ```bash
 truffle migrate --reset

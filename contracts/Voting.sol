@@ -106,6 +106,7 @@ contract Voting is Ownable {
     function addVoter(address _addr) external onlyOwner {
         require(workflowStatus == WorkflowStatus.RegisteringVoters, 'Voters registration is not open yet');
         require(voters[_addr].isRegistered != true, 'Already registered');
+        require(keccak256(abi.encode(_addr)) != keccak256(abi.encode("")), 'The address cannot be empty'); // facultatif
     
         voters[_addr].isRegistered = true;
         emit VoterRegistered(_addr);
