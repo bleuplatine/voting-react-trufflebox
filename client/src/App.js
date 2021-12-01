@@ -12,6 +12,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import ModalAlert from './components/ModalAlert'
 import ModalEvent from './components/ModalEvent'
 import Workflow from './components/Workflow'
+import Voters from './components/Voters'
 
 import img0 from "./img/0.svg";
 import img1 from "./img/1.svg";
@@ -113,6 +114,7 @@ const App = () => {
       setVotersList(old => [...old, voter])
       setVoter(null)
     }
+    console.log(`votersList`, votersList)
   }, [voter]);
 
   useEffect(() => {
@@ -350,7 +352,7 @@ const App = () => {
   ) : (
 
     <>
-    {/* WORKFLOW */}
+      {/* WORKFLOW */}
       <Workflow srcImg={srcImg} workflowStatusId={workflowStatusId} statusWF={statusWF} actualAccount={actualAccount} statusButton={statusButton} owner={owner} handleWorkflow={handleWorkflow} />
 
 
@@ -384,7 +386,7 @@ const App = () => {
                   Liste des comptes autorisés</Card.Footer>
                 <ListGroup variant="flush">
                   {votersList &&
-                    votersList.map((a, i) => <ListGroup.Item key={i}>{a}</ListGroup.Item>)
+                    votersList.map((a, i) => <ListGroup.Item key={i}>{a[1]}</ListGroup.Item>)
                   }
                 </ListGroup>
               </>}

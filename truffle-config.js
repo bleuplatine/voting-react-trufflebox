@@ -12,11 +12,12 @@ module.exports = {
     },
     ropsten: {
       provider: () =>
-        new HDWalletProvider(
-          `${process.env.MNEMONIC}`,
-          `https://ropsten.infura.io/v3/${process.env.INFURA_ID}`,
-          1
-        ),
+        new HDWalletProvider({
+          mnemonic: `${process.env.MNEMONIC}`,
+          providerOrUrl: `https://ropsten.infura.io/v3/${process.env.INFURA_ID}`,
+          // numberOfAddresses: 1,
+          addressIndex: 0
+        }),
       network_id: 3,
     },
   },
