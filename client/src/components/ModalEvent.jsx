@@ -3,12 +3,12 @@ import Modal from 'react-bootstrap/Modal';
 
 
 const ModalEvent = (props) => {
-  const { showEvent, messageEvent, fct } = props
+  const { showEvent, messageEvent, closeModalEvent } = props
   return (
     <>
       <Modal
         show={showEvent}
-        onHide={fct}
+        onHide={closeModalEvent}
         dialogClassName="modal-90w"
         aria-labelledby="alert-modal">
         <Modal.Header closeButton className="bg-success text-white">

@@ -11,6 +11,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 
 import ModalAlert from './components/ModalAlert'
 import ModalEvent from './components/ModalEvent'
+import Workflow from './components/Workflow'
 
 import img0 from "./img/0.svg";
 import img1 from "./img/1.svg";
@@ -43,7 +44,7 @@ const App = () => {
   const [winnersList, setWinnersList] = useState(null)
   const [srcImg, setSrcImg] = useState(img0)
 
-  const status = [
+  const statusWF = [
     'Enregistrement des voteurs en cours',
     'Enregistrement des propositions en cours',
     'Enregistrement des propositions terminée',
@@ -343,34 +344,19 @@ const App = () => {
     }
   }
 
-  return !data.web3 ? (
+  const { owner, web3 } = data
+  return !web3 ? (
     <div className="container">Loading Web3, accounts, and contract...</div>
   ) : (
-    <>
 
-      {/* WORKFLOW */}
-      <div className="container mt-5">
-        <Card className="text-center">
-          <Card.Img className="bg-white" variant="top" src={srcImg} />
-          <Card.Header className="fs-1 bg-light text-dark text-uppercase">
-            <strong>{status[workflowStatusId]}</strong></Card.Header>
-          {(actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
-            workflowStatusId < statusButton.length &&
-            <Card.Body>
-              <Form>
-                <Button className="text-uppercase" onClick={handleWorkflow}
-                  variant={/[13]/.test(workflowStatusId) ? "danger" : "success"} type="submit">
-                  <i class={/[13]/.test(workflowStatusId) ? "bi bi-stop-circle-fill" : "bi bi-play-circle-fill"}> </i>
-                  {workflowStatusId < statusButton.length ? statusButton[workflowStatusId] : "Terminé"}
-                </Button>
-              </Form>
-            </Card.Body>}
-        </Card>
-      </div>
+    <>
+    {/* WORKFLOW */}
+      <Workflow srcImg={srcImg} workflowStatusId={workflowStatusId} statusWF={statusWF} actualAccount={actualAccount} statusButton={statusButton} owner={owner} handleWorkflow={handleWorkflow} />
+
 
       {/* VOTERS */}
       {(workflowStatusId === "0") &&
-        (actualAccount ? actualAccount.toUpperCase() === data.owner.toUpperCase() : true) &&
+        (actualAccount ? actualAccount.toUpperCase() === owner.toUpperCase() : true) &&
         <div className="container mt-5">
           <Card className="text-center">
             <Card.Header className="fs-3 bg-light text-black"><i class="bi bi-person-plus-fill"> </i>
@@ -508,10 +494,10 @@ const App = () => {
         </div>}
 
       {showAlert &&
-        <ModalAlert showAlert={showAlert} messageAlert={messageAlert} fct={closeModalAlert} />
+        <ModalAlert showAlert={showAlert} messageAlert={messageAlert} closeModalAlert={closeModalAlert} />
       }
       {showEvent &&
-        <ModalEvent showEvent={showEvent} messageEvent={messageEvent} fct={closeModalEvent} />
+        <ModalEvent showEvent={showEvent} messageEvent={messageEvent} closeModalEvent={closeModalEvent} />
       }
     </>
   );
