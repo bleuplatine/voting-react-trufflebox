@@ -2,17 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import VotingContract from "./contracts/Voting.json";
 import getWeb3 from "./getWeb3";
 
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Card from 'react-bootstrap/Card';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Table from 'react-bootstrap/Table';
-import InputGroup from 'react-bootstrap/InputGroup';
-
 import ModalAlert from './components/ModalAlert'
 import ModalEvent from './components/ModalEvent'
 import Workflow from './components/Workflow'
 import Voters from './components/Voters'
+import Proposals from './components/Proposals'
+import Voting from './components/Voting'
+import Results from './components/Results'
 
 import img0 from "./img/0.svg";
 import img1 from "./img/1.svg";
@@ -66,6 +62,8 @@ const App = () => {
 
   const closeModalAlert = () => setShowAlert(false)
   const closeModalEvent = () => setShowEvent(false)
+  const onChangeTargetValue = (e) => setContentForm(e.target.value)
+  const onChangeTargetId = (e) => setCurrentVote(e.target.id)
 
 
   useEffect(() => {
@@ -358,142 +356,24 @@ const App = () => {
 
       {/* VOTERS */}
       {(workflowStatusId === "0") &&
-        (actualAccount ? actualAccount.toUpperCase() === owner.toUpperCase() : true) &&
-        <div className="container mt-5">
-          <Card className="text-center">
-            <Card.Header className="fs-3 bg-light text-black"><i class="bi bi-person-plus-fill"> </i>
-              Enregistrer un nouveau voteur</Card.Header>
-            <Card.Body>
-              <Form>
-                <Form.Group className="mb-3" controlId="formAddress">
-                  <Form.Label>Saisir une adresse Ethereum</Form.Label>
-                  <InputGroup>
-                    <InputGroup.Text id="inputAddress"><i class="bi bi-at"></i></InputGroup.Text>
-                    <Form.Control type="text" ref={refAddress} aria-describedby="inputAddress"
-                      value={contentForm} onChange={(e) => setContentForm(e.target.value)} />
-                  </InputGroup>
-                </Form.Group>
-
-                <Button className="text-uppercase" onClick={plusVoter} variant="info" type="submit">
-                  Enregistrer
-                </Button>
-              </Form>
-            </Card.Body>
-
-            {votersList[0] &&
-              <>
-                <Card.Footer className="fs-3 bg-light text-black"><i class="bi bi-people-fill"> </i>
-                  Liste des comptes autorisés</Card.Footer>
-                <ListGroup variant="flush">
-                  {votersList &&
-                    votersList.map((a, i) => <ListGroup.Item key={i}>{a[1]}</ListGroup.Item>)
-                  }
-                </ListGroup>
-              </>}
-          </Card>
-        </div>}
-
+        <Voters contentForm={contentForm} refAddress={refAddress} votersList={votersList} plusVoter={plusVoter} onChangeTargetValue={onChangeTargetValue} />
+      }
 
       {/* PROPOSALS */}
       {(workflowStatusId === "1") &&
-        <div className="container mt-5">
-          <Card className="text-center">
-            <Card.Header className="fs-3  bg-light text-black"><i class="bi bi-chat-right-text"> </i>
-              Enregistrer une nouvelle proposition</Card.Header>
-            <Card.Body>
-              <Form>
-                <Form.Group className="mb-3" controlId="formAddress">
-                  <Form.Label>Décrire votre proposition</Form.Label>
-                  <InputGroup>
-                    <InputGroup.Text id="inputAddress"><i class="bi bi-pen"></i></InputGroup.Text>
-                    <Form.Control type="text" ref={refProposal}
-                      value={contentForm} onChange={(e) => setContentForm(e.target.value)} />
-                  </InputGroup>
-                </Form.Group>
-
-                <Button className="text-uppercase" onClick={plusProposal} variant="info" type="submit">
-                  Enregistrer
-                </Button>
-              </Form>
-            </Card.Body>
-
-            {proposalsList[0] &&
-              <>
-                <Card.Header className="fs-3  bg-light text-black"><i class="bi bi-list-task"> </i>
-                  Liste des propositions</Card.Header>
-                <ListGroup variant="flush">
-                  {proposalsList &&
-                    proposalsList.map((a, i) => <ListGroup.Item key={i}>{a[0]}</ListGroup.Item>)
-                  }
-                </ListGroup>
-              </>}
-          </Card>
-        </div>}
-
+        <Proposals contentForm={contentForm} refProposal={refProposal} proposalsList={proposalsList} plusProposal={plusProposal} onChangeTargetValue={onChangeTargetValue} />
+      }
 
       {/* VOTING */}
       {(workflowStatusId === "3") &&
         !voteOK &&
-        <div className="container mt-5">
-          <Card className="text-center">
-            <Card.Header className="fs-3 bg-light text-black"><i class="bi bi-check-circle-fill"> </i>
-              Voter pour une proposition</Card.Header>
-            <Card.Body>
-              <Form onSubmit={handleVote}>
-                <Form.Group className="text-start mb-3">
-                  {proposalsList &&
-                    proposalsList.map((a, i) =>
-                      <Form.Check
-                        key={i}
-                        onChange={(e) => setCurrentVote(e.target.id)}
-                        type="radio"
-                        label={a[0]}
-                        name="formRadios"
-                        id={i}
-                      />)
-                  }
-                </Form.Group>
-                <Form.Group >
-                  <Button className="text-uppercase" variant="info" type="submit">Voter</Button>
-                </Form.Group>
-              </Form>
-            </Card.Body>
-          </Card>
-        </div>}
+        <Voting handleVote={handleVote} proposalsList={proposalsList} onChangeTargetId={onChangeTargetId} />
+      }
 
-
-      {/* RESULT */}
+      {/* RESULTS */}
       {(workflowStatusId === "5") &&
-        <div className="container mt-5">
-          <Card className="text-center">
-            <Card.Header className="fs-3 bg-light text-black"><i class="bi bi-trophy-fill"> </i>
-              Proposition(s) adoptée(s)</Card.Header>
-            <ListGroup variant="flush" className="fs-4">
-              {winnersList &&
-                winnersList.map((a, i) => <ListGroup.Item className="bg-info" key={i}>{a[0]}</ListGroup.Item>)
-              }
-            </ListGroup>
-          </Card>
-          <Card className="text-center mt-5">
-            <Card.Header className="fs-3 bg-light text-black"><i class="bi bi-sort-numeric-down"> </i>
-              Résultats des votes</Card.Header>
-            <Table striped bordered>
-              <thead>
-                <tr>
-                  <th>Nombre de votes</th>
-                  <th>Propositions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {proposalsList &&
-                  [...proposalsList]
-                    .sort((a, b) => !b[1] - !a[1] || b[1] - a[1])
-                    .map((a, i) => <tr key={i}><td>{a[1]}</td><td>{a[0]}</td></tr>)
-                }
-              </tbody>
-            </Table>
-          </Card>
-        </div>}
+        <Results winnersList={winnersList} proposalsList={proposalsList} />
+      }
 
       {showAlert &&
         <ModalAlert showAlert={showAlert} messageAlert={messageAlert} closeModalAlert={closeModalAlert} />
