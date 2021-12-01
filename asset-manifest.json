@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/voting-react-trufflebox/static/css/main.4a4137e4.chunk.css",
-    "main.js": "/voting-react-trufflebox/static/js/main.832a1987.chunk.js",
-    "main.js.map": "/voting-react-trufflebox/static/js/main.832a1987.chunk.js.map",
+    "main.js": "/voting-react-trufflebox/static/js/main.44624876.chunk.js",
+    "main.js.map": "/voting-react-trufflebox/static/js/main.44624876.chunk.js.map",
     "runtime-main.js": "/voting-react-trufflebox/static/js/runtime-main.5fc54ffa.js",
     "runtime-main.js.map": "/voting-react-trufflebox/static/js/runtime-main.5fc54ffa.js.map",
     "static/css/2.11049179.chunk.css": "/voting-react-trufflebox/static/css/2.11049179.chunk.css",
@@ -25,6 +25,6 @@
     "static/css/2.11049179.chunk.css",
     "static/js/2.0b388bcd.chunk.js",
     "static/css/main.4a4137e4.chunk.css",
-    "static/js/main.832a1987.chunk.js"
+    "static/js/main.44624876.chunk.js"
   ]
 }
