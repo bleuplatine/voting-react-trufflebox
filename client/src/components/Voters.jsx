@@ -6,7 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import ListGroup from 'react-bootstrap/ListGroup';
 
 const Voters = (props) => {
-  const { contentForm, refAddress, votersList, plusVoter, onChangeInForm } = props
+  const { contentForm, refAddress, votersList, plusVoter, onChangeTargetValue } = props
 
   return (
     <div className="container mt-5">
@@ -20,7 +20,7 @@ const Voters = (props) => {
               <InputGroup>
                 <InputGroup.Text id="inputAddress"><i class="bi bi-at"></i></InputGroup.Text>
                 <Form.Control type="text" ref={refAddress} aria-describedby="inputAddress"
-                  value={contentForm} onChange={onChangeInForm} />
+                  value={contentForm} onChange={onChangeTargetValue} />
               </InputGroup>
             </Form.Group>
 
