@@ -16,6 +16,8 @@ import img2 from "./img/2.svg";
 import img3 from "./img/3.svg";
 import img4 from "./img/4.svg";
 import img5 from "./img/5.svg";
+import logo1 from "./img/logo1.svg";
+import logo2 from "./img/logo2.svg";
 
 const App = () => {
   const [data, setData] = useState({
@@ -50,7 +52,7 @@ const App = () => {
     'Résultats des votes'
   ]
   const txtWF = [
-    "L'administrateur enregistre actuellement l'adresse de chaque compte Ethereum des participants éligibles au dépot de propositions et vote.",
+    "L'administrateur enregistre actuellement l'adresse de chaque compte Ethereum des participants éligibles au dépot de propositions suivi des votes.",
     "Chaque proposition doit être conforme aux conditions du SNP et fait l'objet d'une vérification de recevabilité avant démarrage de la session de vote.",
     "Enregistrement des propositions terminée",
     "Session de vote en cours",
@@ -362,7 +364,9 @@ const App = () => {
       <nav className='bg-black '>
         <div className='container'>
           <div className='row py-3'>
-            <div class="col text-start text-white fw-bold"><i class="bi bi-shield-lock-fill text-info" style={{ fontSize: "25px" }}> </i>Ultra Secure Online Voting</div>
+            <div class="col text-start text-white fw-bold">
+              <img src={logo1} className="d-inline-block align-top" alt="" height="35" />
+            </div>
             {/* <div class="col text-end text-white">ouvert depuis 02:36</div> */}
           </div>
         </div>
@@ -399,6 +403,14 @@ const App = () => {
       {showEvent &&
         <ModalEvent showEvent={showEvent} messageEvent={messageEvent} closeModalEvent={closeModalEvent} />
       }
+
+      <footer className="py-5 bg-dark bg-gradient text-center">
+        <img src={logo2} alt="" height="100" />
+      </footer>
+      <footer className="py-3 bg-black">
+        <div className="container"><p className="m-0 text-end text-white">
+          Copyright &copy; ULTRASECURE 2021</p></div>
+      </footer>
     </>
   );
 };
