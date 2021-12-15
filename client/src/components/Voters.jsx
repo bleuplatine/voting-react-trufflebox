@@ -17,10 +17,13 @@ const Voters = (props) => {
           <Form>
             <Form.Group className="mb-3" controlId="formAddress">
               <Form.Label>Saisir une adresse Ethereum</Form.Label>
-              <InputGroup>
+              <InputGroup hasValidation>
                 <InputGroup.Text id="inputAddress"><i class="bi bi-at"></i></InputGroup.Text>
                 <Form.Control type="text" ref={refAddress} aria-describedby="inputAddress"
-                  value={contentForm} onChange={onChangeTargetValue} />
+                  value={contentForm} onChange={onChangeTargetValue}
+                  isInvalid={!/^0x[a-fA-F0-9]{40}$/.test(contentForm)}
+                  isValid={/^0x[a-fA-F0-9]{40}$/.test(contentForm)}
+                />
               </InputGroup>
             </Form.Group>
 
