@@ -49,6 +49,14 @@ const App = () => {
     'Session de vote terminée',
     'Résultats des votes'
   ]
+  const txtWF = [
+    "L'administrateur enregistre actuellement l'adresse de chaque compte Ethereum des participants éligibles au dépot de propositions et vote.",
+    "Chaque proposition doit être conforme aux conditions du SNP et fait l'objet d'une vérification de recevabilité avant démarrage de la session de vote.",
+    "Enregistrement des propositions terminée",
+    "Session de vote en cours",
+    "Session de vote terminée",
+    "Résultats des votes"
+  ]
   const statusButton = [
     "Débuter l'enregistrement des propositions",
     "Stopper l'enregistrement des propositions",
@@ -350,8 +358,18 @@ const App = () => {
   ) : (
 
     <>
+
+      <nav className='bg-black '>
+        <div className='container'>
+          <div className='row py-3'>
+            <div class="col text-start text-white fw-bold"><i class="bi bi-shield-lock-fill text-info" style={{ fontSize: "25px" }}> </i>Ultra Secure Online Voting</div>
+            {/* <div class="col text-end text-white">ouvert depuis 02:36</div> */}
+          </div>
+        </div>
+      </nav>
+
       {/* WORKFLOW */}
-      <Workflow srcImg={srcImg} workflowStatusId={workflowStatusId} statusWF={statusWF} actualAccount={actualAccount} statusButton={statusButton} owner={owner} handleWorkflow={handleWorkflow} />
+      <Workflow srcImg={srcImg} workflowStatusId={workflowStatusId} statusWF={statusWF} txtWF={txtWF} actualAccount={actualAccount} statusButton={statusButton} owner={owner} handleWorkflow={handleWorkflow} />
 
 
       {/* VOTERS */}
