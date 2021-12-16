@@ -5,6 +5,9 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import ListGroup from 'react-bootstrap/ListGroup';
 
+import ethereum from "../img/ethereum.svg";
+
+
 const Voters = (props) => {
   const { contentForm, refAddress, votersList, plusVoter, onChangeTargetValue } = props
 
@@ -17,14 +20,18 @@ const Voters = (props) => {
             <div className="fs-3 d-inline-flex bg-info text-white rounded-3 mb-3 px-3 py-2">
               <i className="bi bi-person-plus-fill"></i></div>
             <h2 className="fw-bolder">Enregistrer un nouveau voteur</h2>
+            <p className="lead mb-0">Section réservée à l'administrateur</p>
           </div>
-          <div className="row justify-content-center">
+
+          <div className="row justify-content-center pb-4">
             <div className="col-lg-6">
               <Form className="text-center d-grid gap-2">
                 <Form.Group className="mb-3" controlId="formAddress">
-                  <Form.Label>Saisir une adresse Ethereum</Form.Label>
+                  <Form.Label>Saisir une adresse Ethereum valide</Form.Label>
                   <InputGroup hasValidation>
-                    <InputGroup.Text id="inputAddress"><i class="bi bi-at"></i></InputGroup.Text>
+                    <InputGroup.Text id="inputAddress">
+                      <img src={ethereum} alt="" height="20" />
+                    </InputGroup.Text>
                     <Form.Control type="text" ref={refAddress} aria-describedby="inputAddress"
                       value={contentForm} onChange={onChangeTargetValue}
                       isInvalid={!/^0x[a-fA-F0-9]{40}$/.test(contentForm)}
@@ -50,8 +57,8 @@ const Voters = (props) => {
               {votersList &&
                 votersList.map((a, i) => <ListGroup.Item key={i}>{a[1]}</ListGroup.Item>)}
             </ListGroup>
-          </Card>
-        }
+          </Card>}
+
       </div>
     </section>
   )

@@ -215,6 +215,9 @@ const App = () => {
       if (/Registering proposals cant be started now/.test(error.message)) {
         setMessageAlert("L'enregistrement des propositions ne peut pas commencer maintenant !")
         setShowAlert(true)
+      } else if (/caller is not the owner/.test(error.message)) {
+        setMessageAlert("Vous n'êtes pas l'administrateur !")
+        setShowAlert(true)
       } else if (/Registering proposals havent started yet/.test(error.message)) {
         setMessageAlert("L'enregistrement des propositions n'a pas commencé !")
         setShowAlert(true)
@@ -248,6 +251,9 @@ const App = () => {
       // console.log(`error`, error.message)
       if (/Already registered/.test(error.message)) {
         setMessageAlert('Adresse déjà enregistrée !')
+        setShowAlert(true)
+      } else if (/caller is not the owner/.test(error.message)) {
+        setMessageAlert("Vous n'êtes pas l'administrateur !")
         setShowAlert(true)
       } else if (/Voters registration is not open yet/.test(error.message)) {
         setMessageAlert('Enregistrement des voteurs inactive !')
@@ -364,7 +370,7 @@ const App = () => {
       <nav className='bg-black '>
         <div className='container'>
           <div className='row py-3'>
-            <div class="col text-start text-white fw-bold">
+            <div className="col text-start text-white fw-bold">
               <img src={logo1} className="d-inline-block align-top" alt="" height="35" />
             </div>
             {/* <div class="col text-end text-white">ouvert depuis 02:36</div> */}
@@ -378,6 +384,8 @@ const App = () => {
 
       {/* VOTERS */}
       {(workflowStatusId === "0") &&
+        (actualAccount ? actualAccount.toUpperCase() === owner.toUpperCase() : true) &&
+        workflowStatusId < statusButton.length &&
         <Voters contentForm={contentForm} refAddress={refAddress} votersList={votersList} plusVoter={plusVoter} onChangeTargetValue={onChangeTargetValue} />
       }
 
