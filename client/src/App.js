@@ -404,7 +404,7 @@ const App = () => {
         <ModalEvent showEvent={showEvent} messageEvent={messageEvent} closeModalEvent={closeModalEvent} />
       }
 
-      <footer className="py-5 bg-dark bg-gradient text-center">
+      <footer className="py-5 bg-primary bg-gradient text-center">
         <img src={logo2} alt="" height="100" />
       </footer>
       <footer className="py-3 bg-black">
