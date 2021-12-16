@@ -55,9 +55,9 @@ const App = () => {
     "L'administrateur enregistre actuellement l'adresse de chaque compte Ethereum des participants éligibles au dépot de propositions suivi des votes.",
     "Vous pouvez dés à présent enregistrer une ou plusieurs propositions. Chaque proposition doit être conforme aux conditions du SNP et fait l'objet d'une vérification de recevabilité avant démarrage de la session de vote.",
     "Chaque proposition est désormais en cours de vérification de recevabilité avant démarrage de la session de vote.",
-    "Vous pouvez dés à présent voter pour une et une seule proposition",
+    "Vous pouvez dés à présent voter pour une et une seule proposition.",
     "Chaque vote est désormais enregistré. L'administrateur publiera rapidement les résultats.",
-    "Les propositions et votes enregistrés dans la blockchain sont infalsifiables et peuvent être mis à disposition du public."
+    "Les propositions et votes enregistrés dans la blockchain sont immuables, infalsifiables et à disposition du public."
   ]
   const statusButton = [
     "Débuter l'enregistrement des propositions",

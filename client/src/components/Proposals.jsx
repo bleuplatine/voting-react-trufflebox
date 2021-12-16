@@ -44,12 +44,14 @@ const Proposals = (props) => {
         </div>
 
         {proposalsList[0] &&
-          <Card className="my-5 mx-auto text-center col-lg-6 border-info">
+          <Card className="my-5 mx-auto text-center col-lg-9 border-info">
             <Card.Header className="py-3 fs-3 bg-info text-white"><i class="bi bi-list-task"> </i>
               Liste des propositions</Card.Header>
             <ListGroup variant="flush">
               {proposalsList &&
-                proposalsList.map((a, i) => <ListGroup.Item key={i}>{a[0]}</ListGroup.Item>)}
+                proposalsList.map((a, i) => <ListGroup.Item
+                  className="text-start"
+                  key={i}>{a[0]}</ListGroup.Item>)}
             </ListGroup>
           </Card>}
 
