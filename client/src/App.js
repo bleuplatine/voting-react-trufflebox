@@ -365,7 +365,7 @@ const App = () => {
     <div className="container">Loading Web3, accounts, and contract...</div>
   ) : (
 
-    <>
+    <div className="d-flex flex-column min-vh-100">
 
       <nav className='bg-black '>
         <div className='container'>
@@ -412,14 +412,16 @@ const App = () => {
         <ModalEvent showEvent={showEvent} messageEvent={messageEvent} closeModalEvent={closeModalEvent} />
       }
 
-      <footer className="py-5 bg-primary bg-gradient text-center">
-        <img src={logo2} alt="" height="100" />
+      <footer className="mt-auto">
+        <div className="py-5 bg-primary bg-gradient text-center">
+          <img src={logo2} alt="" height="100" />
+        </div>
+        <div className="py-3 bg-black">
+          <div className="container"><p className="m-0 text-end text-white">
+            Copyright &copy; ULTRASECURE 2021</p></div>
+        </div>
       </footer>
-      <footer className="py-3 bg-black">
-        <div className="container"><p className="m-0 text-end text-white">
-          Copyright &copy; ULTRASECURE 2021</p></div>
-      </footer>
-    </>
+    </div>
   );
 };
 
