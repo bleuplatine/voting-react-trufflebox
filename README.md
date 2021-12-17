@@ -1,7 +1,7 @@
 # Déploiement sur Ganache (ou Ropsten)
 
 ## ULTRASECURE Online Voting
-![Voting-readme](https://user-images.githubusercontent.com/52157260/146524844-5630fa6a-2929-4c4c-a48d-933afab07b2e.png)
+![Voting02](https://user-images.githubusercontent.com/52157260/146526430-5e00ddd0-c484-4d5f-be4c-75288c704120.png)
 
 
 ## Installation et lancement
