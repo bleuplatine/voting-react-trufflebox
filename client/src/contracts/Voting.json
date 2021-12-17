@@ -30238,12 +30238,12 @@
         }
       },
       "links": {},
-      "address": "0xAE4D1bf3a3c86B07cca80060DD9e6f9a7814D1A9",
-      "transactionHash": "0xfad1a71386872f88915444ac02446cac20b0d4991605d1af338d98c5612c2fc5"
+      "address": "0x640e76778653E934C7b04573D115c4d6BAc4be44",
+      "transactionHash": "0xe3d73a933058f3440d525f42f5851d9f6874f2b579773f59fff1c47859260afd"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-12-16T18:15:33.318Z",
+  "updatedAt": "2021-12-17T09:13:38.733Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Cyril Castagnet - Sébastien Verdenal",
