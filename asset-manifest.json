@@ -1,30 +1,33 @@
 {
   "files": {
-    "main.css": "/voting-react-trufflebox/static/css/main.4a4137e4.chunk.css",
-    "main.js": "/voting-react-trufflebox/static/js/main.44624876.chunk.js",
-    "main.js.map": "/voting-react-trufflebox/static/js/main.44624876.chunk.js.map",
+    "main.css": "/voting-react-trufflebox/static/css/main.69fc010a.chunk.css",
+    "main.js": "/voting-react-trufflebox/static/js/main.c3e54a69.chunk.js",
+    "main.js.map": "/voting-react-trufflebox/static/js/main.c3e54a69.chunk.js.map",
     "runtime-main.js": "/voting-react-trufflebox/static/js/runtime-main.5fc54ffa.js",
     "runtime-main.js.map": "/voting-react-trufflebox/static/js/runtime-main.5fc54ffa.js.map",
-    "static/css/2.11049179.chunk.css": "/voting-react-trufflebox/static/css/2.11049179.chunk.css",
-    "static/js/2.0b388bcd.chunk.js": "/voting-react-trufflebox/static/js/2.0b388bcd.chunk.js",
-    "static/js/2.0b388bcd.chunk.js.map": "/voting-react-trufflebox/static/js/2.0b388bcd.chunk.js.map",
+    "static/css/2.ab9be0a6.chunk.css": "/voting-react-trufflebox/static/css/2.ab9be0a6.chunk.css",
+    "static/js/2.c47de431.chunk.js": "/voting-react-trufflebox/static/js/2.c47de431.chunk.js",
+    "static/js/2.c47de431.chunk.js.map": "/voting-react-trufflebox/static/js/2.c47de431.chunk.js.map",
     "index.html": "/voting-react-trufflebox/index.html",
-    "static/css/2.11049179.chunk.css.map": "/voting-react-trufflebox/static/css/2.11049179.chunk.css.map",
-    "static/css/main.4a4137e4.chunk.css.map": "/voting-react-trufflebox/static/css/main.4a4137e4.chunk.css.map",
-    "static/js/2.0b388bcd.chunk.js.LICENSE.txt": "/voting-react-trufflebox/static/js/2.0b388bcd.chunk.js.LICENSE.txt",
-    "static/media/0.764c16f6.svg": "/voting-react-trufflebox/static/media/0.764c16f6.svg",
-    "static/media/1.0c5b1976.svg": "/voting-react-trufflebox/static/media/1.0c5b1976.svg",
-    "static/media/2.89703896.svg": "/voting-react-trufflebox/static/media/2.89703896.svg",
-    "static/media/3.a26a7e53.svg": "/voting-react-trufflebox/static/media/3.a26a7e53.svg",
-    "static/media/4.18b011ff.svg": "/voting-react-trufflebox/static/media/4.18b011ff.svg",
-    "static/media/5.8b94cd6e.svg": "/voting-react-trufflebox/static/media/5.8b94cd6e.svg",
-    "static/media/bootstrap-icons.css": "/voting-react-trufflebox/static/media/bootstrap-icons.ea6f3dfe.woff"
+    "static/css/2.ab9be0a6.chunk.css.map": "/voting-react-trufflebox/static/css/2.ab9be0a6.chunk.css.map",
+    "static/css/main.69fc010a.chunk.css.map": "/voting-react-trufflebox/static/css/main.69fc010a.chunk.css.map",
+    "static/js/2.c47de431.chunk.js.LICENSE.txt": "/voting-react-trufflebox/static/js/2.c47de431.chunk.js.LICENSE.txt",
+    "static/media/0.8acc16fa.svg": "/voting-react-trufflebox/static/media/0.8acc16fa.svg",
+    "static/media/1.d19eb2ef.svg": "/voting-react-trufflebox/static/media/1.d19eb2ef.svg",
+    "static/media/2.09ed3e16.svg": "/voting-react-trufflebox/static/media/2.09ed3e16.svg",
+    "static/media/3.1f0bfb15.svg": "/voting-react-trufflebox/static/media/3.1f0bfb15.svg",
+    "static/media/4.a1081bc0.svg": "/voting-react-trufflebox/static/media/4.a1081bc0.svg",
+    "static/media/5.1daf3b2f.svg": "/voting-react-trufflebox/static/media/5.1daf3b2f.svg",
+    "static/media/bootstrap-icons.css": "/voting-react-trufflebox/static/media/bootstrap-icons.ea6f3dfe.woff",
+    "static/media/ethereum.e732bb84.svg": "/voting-react-trufflebox/static/media/ethereum.e732bb84.svg",
+    "static/media/logo1.e9c0bdde.svg": "/voting-react-trufflebox/static/media/logo1.e9c0bdde.svg",
+    "static/media/logo2.0547caed.svg": "/voting-react-trufflebox/static/media/logo2.0547caed.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.5fc54ffa.js",
-    "static/css/2.11049179.chunk.css",
-    "static/js/2.0b388bcd.chunk.js",
-    "static/css/main.4a4137e4.chunk.css",
-    "static/js/main.44624876.chunk.js"
+    "static/css/2.ab9be0a6.chunk.css",
+    "static/js/2.c47de431.chunk.js",
+    "static/css/main.69fc010a.chunk.css",
+    "static/js/main.c3e54a69.chunk.js"
   ]
 }
