@@ -30148,8 +30148,8 @@
         }
       },
       "links": {},
-      "address": "0xAEF33B18d508fB88a74C0361bC8A2CcBb707885b",
-      "transactionHash": "0xcc623506978395744c2fea395d3bc33f67753a1fa12015b442a039a7b52e4223"
+      "address": "0x72CA6eD9F07ae25018503aF3516d956e831093D8",
+      "transactionHash": "0xda67b13729412bf2b800a704c00b81cde80a9cd9c8062faf8e8de6d1290fd88d"
     },
     "5777": {
       "events": {
@@ -30243,7 +30243,7 @@
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-12-17T09:13:38.733Z",
+  "updatedAt": "2021-12-18T09:26:25.055Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Cyril Castagnet - Sébastien Verdenal",
